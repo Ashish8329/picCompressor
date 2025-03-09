@@ -3,8 +3,15 @@ from base.base_models import BaseModel
 from base.choices import Status
 from django.utils.translation import gettext_lazy as _
 import uuid
+from base.utils import generate_short_uuid
 
 class Product(BaseModel):
+    req_id=models.CharField(
+        max_length=12,
+        unique=True,
+        editable=False,
+        default=generate_short_uuid
+    )
     name = models.CharField(
         max_length=255,
         verbose_name=_("Product Name"),
@@ -21,6 +28,14 @@ class Product(BaseModel):
         verbose_name=_("Status"),
         help_text=_("Current status of the product img Processing."),
     )
+    csv_file = models.FileField(
+        upload_to='csv_file/',
+        null=True,
+        blank=True,
+        verbose_name=_("CSV file"),
+        help_text=_("product csv file")
+    )
+
     
     def __str__(self):
         return f"{self.name} - {self.status}"

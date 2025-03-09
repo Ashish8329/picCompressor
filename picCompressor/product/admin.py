@@ -5,14 +5,17 @@ from .models import Product, Image
 @admin.register(Product)
 class ProductAdmin(BaseAdmin):
     fields = [
+        "req_id",
         "name",
         "sr_no",
         "status",
+        "csv_file",
     ]
     list_display = [
         "name",
         "status",
     ]
+    readonly_fields = ['req_id',]
 
     def save_model(self, request, obj, form, change):
         return super().save_model(request, obj, form, change)
