@@ -128,8 +128,7 @@ class Image(BaseModel):
 
             # **Step 4: Update size info**
             self.image_size_after = self.compressed_image.size // 1024  # KB
-            self.status = Status.COMPLETED.value  # TODO not Updating
-
+            self.status = Status.COMPLETED.value[0]  
         except PILImage.UnidentifiedImageError:
             raise ValidationError(
                 "Invalid image format. Please upload a valid image file."
