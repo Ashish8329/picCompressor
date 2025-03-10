@@ -10,12 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='.env')
-
+load_dotenv(dotenv_path=".env")
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "product",
-    'rest_framework',
-
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -95,7 +94,6 @@ DATABASES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -138,5 +136,10 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT= os.path.join(BASE_DIR,'media')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# celery
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+FLOWER_URL = "http://localhost:5555"
+FLOWER_URL_PREFIX = "flower"

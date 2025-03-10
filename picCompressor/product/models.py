@@ -11,6 +11,8 @@ from base.base_models import BaseModel
 from base.choices import Status
 from base.utils import generate_short_uuid
 
+from .tasks import process_image
+
 
 class Product(BaseModel):
     req_id = models.CharField(
@@ -99,46 +101,11 @@ class Image(BaseModel):
     def __str__(self):
         return f"Image {self.id} - {self.status}"
 
-    def compress_image(self):
-        """Compress the image by 50% and save it in `compressed_image` field."""
-        if not self.original_image:
-            return
-
-        try:
-            img = PILImage.open(self.original_image)
-            img = img.convert("RGB")  # Ensure compatibility (PNG, WebP, etc.)
-
-            # **Step 1: Resize image to 50% of original size**
-            width, height = img.size
-            new_size = (width // 2, height // 2)  # Reduce to 50%
-            img = img.resize(new_size, PILImage.LANCZOS)
-
-            # **Step 2: Save image with compression (quality=50)**
-            img_io = BytesIO()
-            img.save(img_io, format="JPEG", quality=50)  # JPEG format, 50% quality
-            img_io.seek(0)
-
-            # **Step 3: Save compressed image**
-            compressed_filename = (
-                f"compressed_{self.original_image.name.split('/')[-1]}"
-            )
-            self.compressed_image.save(
-                compressed_filename, ContentFile(img_io.read()), save=False
-            )
-
-            # **Step 4: Update size info**
-            self.image_size_after = self.compressed_image.size // 1024  # KB
-            self.status = Status.COMPLETED.value[0]  
-        except PILImage.UnidentifiedImageError:
-            raise ValidationError(
-                "Invalid image format. Please upload a valid image file."
-            )
-
-        except Exception as e:
-            raise ValidationError(f"Image compression failed: {str(e)}")
-
     def save(self, *args, **kwargs):
-        """Override save method to compress image before saving."""
-        if not self.compressed_image:  # Only compress if not already compressed
-            self.compress_image()
+        """Override save method to trigger Celery task for image compression."""
+        new_instance = self._state.adding  # Check if it's a new image
+
         super().save(*args, **kwargs)
+
+        if new_instance:  # Run Celery task only for new images
+            process_image.delay(self.id)
