@@ -26,6 +26,8 @@ class Product(BaseModel):
     sr_no = models.IntegerField(
         verbose_name=_("Serial Number"),
         help_text=_("Unique serial number of the product."),
+        null=True,
+        blank=True,
     )
     status = models.CharField(
         max_length=100,
