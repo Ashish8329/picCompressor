@@ -14,14 +14,11 @@ from .models import Image, Product
 def decode_csv_file(csv_file):
     """Decodes an uploaded CSV file and returns a file-like object"""
     try:
-        # Ensure the uploaded file is a CSV
         if not csv_file.name.endswith(".csv"):
             raise ValueError("Uploaded file must be a CSV.")
 
-        # Read and decode file (from bytes to string)
         decoded_file = csv_file.read().decode("utf-8")
 
-        # Convert string to file-like object for CSV reader
         return io.StringIO(decoded_file)
 
     except (ValueError, UnicodeDecodeError) as e:
@@ -31,10 +28,10 @@ def decode_csv_file(csv_file):
 def validate_csv_file(csv_file):
     """Validates the uploaded CSV file and returns the number of records"""
     try:
-        file_io = decode_csv_file(csv_file)  # ✅ Reusing the decode function
+        file_io = decode_csv_file(csv_file)
 
         reader = csv.reader(file_io)
-        header = next(reader, None)  # Read the first row (header)
+        header = next(reader, None)
 
         if header is None or len(header) != 2:
             raise ValueError(
@@ -54,9 +51,9 @@ def process_images(csv_file, product):
     """Processes a CSV file and stores images in the database linked to a given product."""
     file_io = decode_csv_file(csv_file)
     reader = csv.reader(file_io)
-    next(reader)  # Skip header row
+    next(reader)
 
-    errors = []  # Collect errors for better response handling
+    errors = []
 
     for row in reader:
         try:
