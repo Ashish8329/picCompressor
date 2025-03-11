@@ -132,6 +132,12 @@ We welcome contributions! Please follow these steps:
 4. Push changes and create a pull request.
 
 ---
+## Contact 📬
+
+For any queries or collaborations, feel free to reach out:
+
+📧 Email: [ashishauti123@gmail.com](mailto:ashishauti123@gmail.com)  
+🔗 LinkedIn: [Ashish](https://www.linkedin.com/in/ashish-auti-069346254)
 
 ## Explore the System :sparkles:
 :point_right: **Congratulations** :tada:! Your Image Processing System is now ready to use. :confetti_ball:
