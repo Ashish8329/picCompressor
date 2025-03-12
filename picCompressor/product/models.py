@@ -32,7 +32,7 @@ class Product(BaseModel):
     status = models.CharField(
         max_length=100,
         choices=[(x.value) for x in Status],
-        default=Status.PENDING,
+        default=Status.PENDING.value[0],
         verbose_name=_("Status"),
         help_text=_("Current status of the product img Processing."),
     )
@@ -59,7 +59,7 @@ class Image(BaseModel):
     status = models.CharField(
         max_length=100,
         choices=[(x.value) for x in Status],
-        default=Status.PENDING,
+        default=Status.PENDING.value[0],
         verbose_name=_("Status"),
         help_text=_("Processing status of the image."),
     )
