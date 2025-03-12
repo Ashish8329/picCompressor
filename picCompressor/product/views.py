@@ -1,8 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from base.choices import Status
@@ -79,7 +80,6 @@ class ProdcutViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-
     def create(self, request, *args, **kwargs):
 
         serializer = self.get_serializer(data=request.data)
@@ -88,3 +88,28 @@ class ProdcutViewSet(viewsets.ModelViewSet):
 
         process_images(product.csv_file, product)  # TODO async
         return Response({"req_id": product.req_id}, status=status.HTTP_201_CREATED)
+
+
+class WebhookViewSet(viewsets.ViewSet):
+    """Webhook endpoint to update product status when image processing is complete."""
+
+    @action(detail=False, methods=["POST"], url_path="update-status")
+    def update_product_status(self, request):
+        """Handles webhook requests to update the product status."""
+        product_id = request.data.get("product_id")
+        new_status = request.data.get("status")
+
+        if not product_id or not new_status:
+            return Response(
+                {"error": "Missing required fields."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        product = get_object_or_404(Product, id=product_id)
+        product.status = new_status
+        product.save(update_fields=["status"])
+
+        return Response(
+            {"message": f"Product {product_id} status updated successfully."},
+            status=status.HTTP_200_OK,
+        )

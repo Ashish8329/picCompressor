@@ -143,3 +143,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 FLOWER_URL = "http://localhost:5555"
 FLOWER_URL_PREFIX = "flower"
+
+
+# Site Url
+SITE_URL = os.getenv("SITE_URL", "http://localhost:8000")
