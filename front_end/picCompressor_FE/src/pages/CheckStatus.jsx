@@ -1,9 +1,20 @@
 import React from 'react'
+import "./styles/CheckStatus.css";
 
 const CheckStatus = () => {
   return (
-    <div>
-      <h1>check status</h1>
+    <div className="container_box">
+      <div className="container_box2">
+        <div className="smcontainer">
+          <label htmlFor="btn">Request ID</label>
+          <input type="text" id="btn" />
+        </div>
+
+        <div className="btn">
+
+          <button>check status</button>
+        </div>
+      </div>
     </div>
   )
 }

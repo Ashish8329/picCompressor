@@ -1,9 +1,11 @@
 import React from 'react'
+import "./Dashboard.css";
+import Container from '../components/Container';
 
 const FileUpload = () => {
   return (
     <div>
-      <h1>fiel upload</h1>
+      <Container />
     </div>
   )
 }

@@ -1,0 +1,64 @@
+.dashboard{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 2vw;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .btn button {
+    background-color: #007bff;  /* Blue color */
+    color: white;               /* White text */
+    border: none;               /* No border */
+    padding: 10px 20px;         /* Padding */
+    font-size: 16px;            /* Text size */
+    cursor: pointer;            /* Pointer cursor */
+    border-radius: 5px;         /* Rounded corners */
+    transition: background 0.3s ease;
+  }
+  
+  .btn button:hover {
+    background-color: #0056b3;  /* Darker blue on hover */
+  }
+  
+
+.container-1{
+    border: 1px solid;
+    width: 40rem;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.container-1 label {
+    font-size: 1rem;
+    color: #333;
+    margin-top: 10px;
+    text-align: center;
+    max-width: 90%;
+    word-wrap: break-word;
+    transition: font-size 0.3s ease, color 0.3s ease;
+  }
+
+  
+
+  @media (max-width: 600px) {
+    label {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    label {
+      font-size: 1.1rem;
+    }
+  }
