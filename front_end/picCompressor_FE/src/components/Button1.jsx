@@ -1,12 +1,17 @@
 import React from 'react'
+import { Routes, Route, useNavigate, Link, Outlet } from "react-router-dom";
 import './button.css'
 
-const Button1 = ({ButtonName}) => {
+const Button1 = ({ buttonName, path = '' }) => {
+
+  const navigate = useNavigate();
+
   return (
-    <div>
-        <button class="button-33" role="button">{ButtonName}</button>
+    <button className="button-33" onClick={() => navigate(path)} role="button">
       
-    </div>
+      {buttonName}
+
+    </button>
   )
 }
 
