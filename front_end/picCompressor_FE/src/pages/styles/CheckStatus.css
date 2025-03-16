@@ -4,6 +4,14 @@
     justify-content: center;
     padding-top: 2vw;
 }
+.error_response{
+  color: red;
+  font-weight: bold;
+}
+.success_response{
+  color: green;
+  font-weight: bold;
+}
 
 .btn {
     display: flex;
