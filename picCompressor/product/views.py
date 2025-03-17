@@ -5,7 +5,7 @@ from django.views import View
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from django.conf import settings
 from base.choices import Status
 
 from .models import Image, Product
@@ -17,10 +17,10 @@ class ProdcutViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+
     def list(self, request, *args, **kwargs):
         """
         Retrieve and process images associated with a given request ID.
-
         """
         req_id = request.GET.get("req_id")
 
@@ -33,9 +33,9 @@ class ProdcutViewSet(viewsets.ModelViewSet):
 
         try:
             images = Image.objects.filter(product__req_id=req_id).values_list(
-                "status", "compressed_image"
+                "status", "compressed_image", "original_image", "image_size_before", "image_size_after"
             )
-
+             
             if not images.exists():
                 return Response(
                     {"error": "No images found for the given request ID"},
@@ -43,29 +43,37 @@ class ProdcutViewSet(viewsets.ModelViewSet):
                 )
 
             total_img_count = len(images)
-            compred_img_count = sum(
-                1 for status, _ in images if status == Status.COMPLETED.value[0]
-            )
-            compressed_images_urls = [img_url for _, img_url in images]
+            compred_img_count = sum(1 for status, _, _, _, _ in images if status == Status.COMPLETED.value[0])
+             
+            base_url = request.build_absolute_uri(settings.MEDIA_URL)  # Get absolute media URL
 
+            compressed_images_urls = []
+            original_images_urls = []
+            img_size_after = []
+            img_size_before = []
+
+            for _, compr_img, org_img, image_size_befor, image_size_after in images:
+                compressed_images_urls.append(base_url+str(compr_img))  # Convert to full URL
+                original_images_urls.append(base_url+str(org_img))  # Convert to full URL
+                img_size_after.append(image_size_after)
+                img_size_before.append(image_size_befor)
+             
             compressed_perc = (
-                round((compred_img_count / total_img_count) * 100)
-                if total_img_count
-                else 0
+                round((compred_img_count / total_img_count) * 100) if total_img_count else 0
             )
 
             response_data = {
                 "request_id": req_id,
                 "status": Status.PENDING.value[0],
             }
-
             if compressed_perc == 100:
                 response_data["output_image_urls"] = compressed_images_urls
+                response_data["original_images_urls"] = original_images_urls
+                response_data["img_size_after"] = img_size_after
+                response_data["img_size_before"] = img_size_before
                 response_data["status"] = Status.COMPLETED.value[0]
-
             else:
                 response_data["compressed_Perc"] = compressed_perc
-
             return Response(response_data)
 
         except ObjectDoesNotExist:
@@ -75,6 +83,7 @@ class ProdcutViewSet(viewsets.ModelViewSet):
             )
 
         except Exception as e:
+            print(f"-----------------6------------------")
             return Response(
                 {"error": f"An unexpected error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
