@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import "./styles/CheckStatus.css";
 import { fetchProductStatus } from "../utils/get";
+import ImageGallery from '../components/ImageGallery';
 
 const CheckStatus = () => {
   const [req_id, setRequestID] = useState('');
@@ -47,10 +48,12 @@ const CheckStatus = () => {
           )}
 
 
-        </form>
-        
+        </form>     
 
       </div>
+      {data && data.output_image_urls && (
+          < ImageGallery imagePaths={data.output_image_urls} />
+        )}
     </div>
   )
 }
