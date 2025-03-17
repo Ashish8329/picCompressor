@@ -83,7 +83,6 @@ class ProdcutViewSet(viewsets.ModelViewSet):
             )
 
         except Exception as e:
-            print(f"-----------------6------------------")
             return Response(
                 {"error": f"An unexpected error occurred: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
