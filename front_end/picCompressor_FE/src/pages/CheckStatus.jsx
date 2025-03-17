@@ -7,6 +7,7 @@ const CheckStatus = () => {
   const [req_id, setRequestID] = useState('');
   const [data, setData] = useState({});
 
+
   const handleRequestChange = (event) => {
     setRequestID(event.target.value)
   }
@@ -52,7 +53,7 @@ const CheckStatus = () => {
 
       </div>
       {data && data.output_image_urls && (
-          < ImageGallery imagePaths={data.output_image_urls} />
+          < ImageGallery data={data} />
         )}
     </div>
   )
