@@ -4,7 +4,11 @@ import { Routes, Route, useNavigate, Link, Outlet } from "react-router-dom";
 import "./styles/Container.css";
 import Button from "./Button";  // Ensure Button component exists
 
+
+
 const Container = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
+  const url = `${BASE_URL}/product/`;
   const [file, setFile] = useState(null);
   const [name, setName] = useState("");
   const [data, setData] = useState('');
@@ -15,7 +19,6 @@ const Container = () => {
 
 
 
-  const url = 'http://127.0.0.1:8000/product/'
 
 
   const handleFileChange = (event) => {
@@ -44,7 +47,7 @@ const Container = () => {
     formData.append("name", name);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/product/", {
+      const response = await fetch(url, {
         method: "POST",
         body: formData,
       });

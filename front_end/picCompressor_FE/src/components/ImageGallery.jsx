@@ -2,7 +2,6 @@ import React from "react";
 import "./styles/ImageGallery.css"; // Import CSS for styling
 
 function ImageGallery({ data }) {
-  console.log("images");
 
   const originalImages = data.original_images_urls || [];
   const compressedImages = data.output_image_urls || [];
